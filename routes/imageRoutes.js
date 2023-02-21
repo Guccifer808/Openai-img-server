@@ -15,19 +15,19 @@ cloudinary.config({
 });
 
 // get
-router.route('/').get(async (req, res) => {
+router.route('/').get(async (request, response) => {
   try {
     const images = await Image.find({});
-    request.status(200).json({ success: true, data: images });
+    response.status(200).json({ success: true, data: images });
   } catch (error) {
-    request.status(500).json({ success: false, message: error });
+    response.status(500).json({ success: false, message: error });
   }
 });
 
 // create
-router.route('/').post(async (req, res) => {
+router.route('/').post(async (request, response) => {
   try {
-    const { name, prompt, photo } = req.body;
+    const { name, prompt, photo } = request.body;
 
     //upload from client to cloudinary
     const photoURL = await cloudinary.uploader.upload(photo);
@@ -39,9 +39,9 @@ router.route('/').post(async (req, res) => {
       photo: photoURL.url,
     });
 
-    res.status(201).json({ success: true, data: newImage });
+    response.status(201).json({ success: true, data: newImage });
   } catch (error) {
-    res.status(500).json({ success: false, message: error });
+    response.status(500).json({ success: false, message: error });
   }
 });
 
